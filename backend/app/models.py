@@ -33,17 +33,17 @@ class Student(db.Model):
     contact_phone = db.Column(db.String(20))
     contact_email = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    #missing relation
     sessions = db.relationship('Session', backref='student', lazy=True, cascade="all, delete-orphan")
 
-
-class Session:
+class Session(db.Model):
     __tablename__ = 'sessions'
-    id = db.Column()
-    date = db.Column()
-    subject = db.Column()
-    hourly_rate = db.Column()
-    duration_minutes = db.Column()
-    session_notes = db.Column()
-    student_id = db.Column()
+
+    id = db.Column(db.Integer, primary_key=True)
+    #sets date to present date by default
+    date = db.Column(db.Date, default=date.today, nullable=False)
+    subject = db.Column(db.String(50), nullable=False)
+    hourly_rate = db.Column(db.Float, nullable=False)
+    duration_minutes = db.Column(db.Integer, nullable=False)
+    session_notes = db.Column(db.Text)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
 
