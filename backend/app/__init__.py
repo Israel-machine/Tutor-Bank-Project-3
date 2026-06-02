@@ -29,4 +29,7 @@ def create_app(config_class=Config):
     from app.routes.sessions import sessions_bp
     app.register_blueprint(sessions_bp, url_prefix='/api') 
 
+    from app.routes.metrics import metrics_bp
+    app.register_blueprint(metrics_bp, url_prefix='/api/metrics') 
+
     return app
