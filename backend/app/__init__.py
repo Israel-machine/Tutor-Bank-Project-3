@@ -23,4 +23,10 @@ def create_app(config_class=Config):
     from app.routes.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
 
+    from app.routes.students import students_bp
+    app.register_blueprint(students_bp, url_prefix='/api/students')
+
+    from app.routes.sessions import sessions_bp
+    app.register_blueprint(sessions_bp, url_prefix='/api') 
+
     return app

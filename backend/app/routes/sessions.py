@@ -1,91 +1,99 @@
 from flask import Blueprint, request, jsonify
-from app.models import db, Student
+from app.models import db, Student, Session
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
-students_bp = Blueprint('students', __name__)
+sessions_bp = Blueprint('sessions', __name__)
 
-@students_bp.route('', methods=['GET'])
+@sessions_bp.route('/students/<int:student_id>/sessions', methods=['GET'])
 @jwt_required()
-def get_students():
+def get_student_sessions(student_id):
     current_user_id = int(get_jwt_identity())
-    students = Student.query.filter_by(user_id=current_user_id).all()
+    student = db.session.get(Student, student_id)
+    
+    if not student or student.user_id != current_user_id:
+        return jsonify({"error": "Student not found or unauthorized access"}), 404
+        
+    sessions = Session.query.filter_by(student_id=student_id).order_by(Session.date.desc()).all()
     
     return jsonify([{
         "id": s.id,
-        "student_first_name": s.student_first_name,
-        "student_last_name": s.student_last_name,
-        "school": s.school,
-        "school_grade": s.school_grade,
-        "billing_address": s.billing_address,
-        "contact_name": s.contact_name,
-        "contact_phone": s.contact_phone,
-        "contact_email": s.contact_email
-    } for s in students]), 200
+        "date": s.date.isoformat(),
+        "subject": s.subject,
+        "hourly_rate": s.hourly_rate,
+        "duration_minutes": s.duration_minutes,
+        "session_notes": s.session_notes,
+        "student_id": s.student_id
+    } for s in sessions]), 200
 
 
-@students_bp.route('', methods=['POST'])
+@sessions_bp.route('/students/<int:student_id>/sessions', methods=['POST'])
 @jwt_required()
-def create_student():
+def create_session(student_id):
     current_user_id = int(get_jwt_identity())
+    student = db.session.get(Student, student_id)
+    
+    if not student or student.user_id != current_user_id:
+        return jsonify({"error": "Student not found or unauthorized access"}), 404
+        
     data = request.get_json() or {}
+    subject = data.get('subject')
+    hourly_rate = data.get('hourly_rate')
+    duration_minutes = data.get('duration_minutes')
     
-    first_name = data.get('student_first_name')
-    last_name = data.get('student_last_name')
-    contact_name = data.get('contact_name')
-    
-    if not first_name or not last_name or not contact_name:
-        return jsonify({"error": "First name, last_name, and contact_name are required"}), 400
+    if not subject or hourly_rate is None or not duration_minutes:
+        return jsonify({"error": "Subject, hourly rate, and duration are required"}), 400
+        
+    date_str = data.get('date')
+    session_date = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else None
 
-    new_student = Student(
-        student_first_name=first_name,
-        student_last_name=last_name,
-        school=data.get('school'),
-        school_grade=data.get('school_grade'),
-        billing_address=data.get('billing_address'),
-        contact_name=contact_name,
-        contact_phone=data.get('contact_phone'),
-        contact_email=data.get('contact_email'),
-        user_id=current_user_id
+    new_session = Session(
+        subject=subject,
+        hourly_rate=float(hourly_rate),
+        duration_minutes=int(duration_minutes),
+        session_notes=data.get('session_notes', ''),
+        student_id=student_id
     )
-    
-    db.session.add(new_student)
+    if session_date:
+        new_session.date = session_date
+        
+    db.session.add(new_session)
     db.session.commit()
-    return jsonify({"message": "Student created successfully", "id": new_student.id}), 201
+    return jsonify({"message": "Session logged successfully", "id": new_session.id}), 201
 
 
-@students_bp.route('/<int:student_id>', methods=['PUT'])
+@sessions_bp.route('/sessions/<int:session_id>', methods=['PUT'])
 @jwt_required()
-def update_student(student_id):
+def update_session(session_id):
     current_user_id = int(get_jwt_identity())
-    student = db.session.get(Student, student_id)
+    session = db.session.get(Session, session_id)
     
-    if not student or student.user_id != current_user_id:
-        return jsonify({"error": "Student not found or unauthorized access"}), 404
+    if not session or session.student.user_id != current_user_id:
+        return jsonify({"error": "Session not found or unauthorized access"}), 404
         
     data = request.get_json() or {}
     
-    student.student_first_name = data.get('student_first_name', student.student_first_name)
-    student.student_last_name = data.get('student_last_name', student.student_last_name)
-    student.school = data.get('school', student.school)
-    student.school_grade = data.get('school_grade', student.school_grade)
-    student.billing_address = data.get('billing_address', student.billing_address)
-    student.contact_name = data.get('contact_name', student.contact_name)
-    student.contact_phone = data.get('contact_phone', student.contact_phone)
-    student.contact_email = data.get('contact_email', student.contact_email)
-    
-    db.session.commit()
-    return jsonify({"message": "Student updated successfully"}), 200
-
-
-@students_bp.route('/<int:student_id>', methods=['DELETE'])
-@jwt_required()
-def delete_student(student_id):
-    current_user_id = int(get_jwt_identity())
-    student = db.session.get(Student, student_id)
-    
-    if not student or student.user_id != current_user_id:
-        return jsonify({"error": "Student not found or unauthorized access"}), 404
+    if data.get('date'):
+        session.date = datetime.strptime(data.get('date'), "%Y-%m-%d").date()
         
-    db.session.delete(student)
+    session.subject = data.get('subject', session.subject)
+    session.hourly_rate = float(data.get('hourly_rate', session.hourly_rate))
+    session.duration_minutes = int(data.get('duration_minutes', session.duration_minutes))
+    session.session_notes = data.get('session_notes', session.session_notes)
+    
     db.session.commit()
-    return jsonify({"message": "Student (and associated sessions) deleted successfully"}), 200
+    return jsonify({"message": "Session updated successfully"}), 200
+
+
+@sessions_bp.route('/sessions/<int:session_id>', methods=['DELETE'])
+@jwt_required()
+def delete_session(session_id):
+    current_user_id = int(get_jwt_identity())
+    session = db.session.get(Session, session_id)
+    
+    if not session or session.student.user_id != current_user_id:
+        return jsonify({"error": "Session not found or unauthorized access"}), 404
+        
+    db.session.delete(session)
+    db.session.commit()
+    return jsonify({"message": "Session deleted successfully"}), 200
