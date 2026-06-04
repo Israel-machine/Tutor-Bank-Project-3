@@ -11,3 +11,7 @@ pipenv install python-dotenv
 Backend start:
 cd backend
 python run.py
+
+front end
+cd frontend
+npm install react-router-dom

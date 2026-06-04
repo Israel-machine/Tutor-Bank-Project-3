@@ -160,14 +160,17 @@ export default function StudentDetails() {
             <div>
               <label style={{ fontSize: '12px' }}>Subject</label>
               <select value={sessionForm.subject} onChange={e => setSessionForm({...sessionForm, subject: e.target.value})} style={{ width: '100%', padding: '6px' }}>
-                <option value="Math">Math</option>
-                <option value="Science">Science</option>
                 <option value="English">English</option>
-                <option value="History">History</option>
+                <option value="Biological_Science">Biological Sciences</option>
+                <option value="Physical_Science">Physical Sciences</option>
+                <option value="Humanities">Humanities</option>
+                <option value="Foreign Language">Foreign Language</option>
+                <option value="Math">Math</option>
+                <option value="other">Other - Please add description in notes</option>
               </select>
             </div>
             <div>
-              <label style={{ fontSize: '12px' }}>Duration (Mins)</label>
+              <label style={{ fontSize: '12px' }}>Duration (Use 15-minute increments)</label>
               <input type="number" step="15" value={sessionForm.duration_minutes} onChange={e => setSessionForm({...sessionForm, duration_minutes: e.target.value})} required style={{ width: '100%', padding: '6px' }} />
             </div>
             <div>
