@@ -85,10 +85,6 @@ export default function Dashboard() {
     <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #eee', paddingBottom: '10px' }}>
         <h1>TutorBank Students Dashboard</h1>
-        <div>
-          <Link to="/metrics" style={{ marginRight: '15px', textDecoration: 'none', fontWeight: 'bold' }}>View Metrics</Link>
-          <button onClick={logout} style={{ padding: '5px 10px' }}>Logout</button>
-        </div>
       </header>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}

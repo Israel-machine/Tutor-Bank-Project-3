@@ -13,7 +13,6 @@ export default function StudentDetails() {
   const [expandedNotes, setExpandedNotes] = useState({}); // Tracking expanded state per session ID
   const [error, setError] = useState('');
 
-  // NEW STATE: Tracks which session ID is currently being edited, and its form data
   const [editingSessionId, setEditingSessionId] = useState(null);
   const [editSessionForm, setEditSessionForm] = useState({
     date: '',
@@ -23,7 +22,6 @@ export default function StudentDetails() {
     session_notes: ''
   });
 
-  // Form States for creating a session
   const [sessionForm, setSessionForm] = useState({
     date: new Date().toISOString().split('T')[0],
     subject: 'Math',
@@ -50,7 +48,6 @@ export default function StudentDetails() {
       setStudent(currentStudent);
       setStudentForm(currentStudent);
 
-      // Fetch sessions
       const sessionsRes = await fetch(`/api/students/${id}/sessions`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -103,7 +100,6 @@ export default function StudentDetails() {
     }
   };
 
-  // NEW METHOD: Begins the editing lifecycle for a specific session card
   const startEditingSession = (session) => {
     setEditingSessionId(session.id);
     setEditSessionForm({
@@ -115,7 +111,6 @@ export default function StudentDetails() {
     });
   };
 
-  // NEW METHOD: Submits updated session modifications to the database engine
   const handleSessionUpdateSubmit = async (e, sessionId) => {
     e.preventDefault();
     try {
@@ -177,21 +172,14 @@ export default function StudentDetails() {
   return (
     <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
       
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>
-        <Link to="/" style={{ textDecoration: 'none', fontWeight: 'bold' }}>← Back to Caseload Dashboard</Link>
-        <div>
-          <Link to="/metrics" style={{ marginRight: '15px', textDecoration: 'none', fontWeight: 'bold', color: '#007bff' }}>
-            View Metrics
-          </Link>
-          <button onClick={logout} style={{ padding: '5px 10px', cursor: 'pointer' }}>Logout</button>
-        </div>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px', textDecoration: 'none', fontWeight: 'bold'}}>
+        <h1>Sessions</h1>
       </header>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div style={{ display: 'flex', gap: '40px', marginTop: '20px' }}>
         
-        {/* Left Hand Container Column */}
         <div style={{ width: '350px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
           <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
@@ -234,7 +222,6 @@ export default function StudentDetails() {
           
         </div>
 
-        {/* Right Hand Content: Form and Action logs */}
         <div style={{ flex: 1 }}>
           <h3>Log a New Session</h3>
           <form onSubmit={handleSessionSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px', marginBottom: '30px', alignItems: 'end' }}>

@@ -56,10 +56,6 @@ export default function Metrics() {
       
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>
         <h1>TutorBank Operations Dashboard (Current Month)</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <Link to="/" style={{ textDecoration: 'none', fontWeight: 'bold' }}>← Return to Caseload</Link>
-          <button onClick={logout} style={{ padding: '5px 10px', cursor: 'pointer' }}>Logout</button>
-        </div>
       </header>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
