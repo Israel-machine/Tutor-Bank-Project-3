@@ -5,8 +5,8 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import StudentDetails from './pages/StudentDetails';
 import Metrics from './pages/Metrics';
-import ProtectedRoute from './components/ProtectedRoute'; // Ensure filename matches
-import Navbar from './components/Navbar'; // Import your new shared ribbon
+import ProtectedRoute from './components/ProtectedRoute'; 
+import Navbar from './components/Navbar'; 
 
 function App() {
   return (

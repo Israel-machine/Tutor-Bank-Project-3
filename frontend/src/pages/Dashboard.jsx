@@ -104,7 +104,6 @@ export default function Dashboard() {
 
       <div className="detail-container">
         
-        {/* Left Side Panel: Pure White Creation Container */}
         <div className="sidebar-column">
           <div className="add-student-container">
             <h3>Add New Student</h3>
@@ -166,7 +165,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Right Content Stream: Pastel Lemon Yellow Student Cards */}
         <div className="main-content-column">
           <h3>Your Caseload</h3>
           <div className="caseload-grid">

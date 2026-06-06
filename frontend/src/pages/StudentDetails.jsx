@@ -206,7 +206,6 @@ export default function StudentDetails() {
 
       <div className="detail-container">
         
-        {/* Left Column: White Profile & Revenue Metadata */}
         <div className="sidebar-column">
           <div className="info-card">
             {!isEditing ? (
@@ -256,7 +255,6 @@ export default function StudentDetails() {
           </div>
         </div>
 
-        {/* Right Column: Logging (White Form Structure) & History (Yellow Cards) */}
         <div className="main-content-column">
           <h3 className="student-session-form-heading">Log a New Session</h3>
           <form onSubmit={handleSessionSubmit} className="form-grid student-form-grid-custom">

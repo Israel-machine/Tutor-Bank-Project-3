@@ -181,20 +181,20 @@ body {
   max-width: 400px;
   margin: 50px auto;
   padding: 25px;
-  background-color: var(--form-white); /* Changes background to white */
-  border: 1px solid #ddd;              /* Adds a subtle, clean border */
-  border-radius: 8px;                  /* Rounds the container corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Soft shadow matching the dashboard */
+  background-color: var(--form-white); 
+  border: 1px solid #ddd;              
+  border-radius: 8px;                 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .auth-page-box {
   max-width: 400px;
   margin: 50px auto;
   padding: 25px;
-  background-color: var(--form-white); /* Changes background to white */
-  border: 1px solid #ddd;              /* Standardizes the border across pages */
-  border-radius: 8px;                  /* Rounds the container corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Soft shadow matching the dashboard */
+  background-color: var(--form-white); 
+  border: 1px solid #ddd;             
+  border-radius: 8px;                  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
 }
 
 .auth-input-group {

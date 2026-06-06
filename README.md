@@ -7,10 +7,21 @@ Using this app, tutors will be able to log student data, record session-specific
 ---
 
 ## Tech Stack & Key Architectures
-- **Frontend:** React (Vite single-page application structure), React Router DOM, Centralized Context API for global session state management.
-- **Backend:** Flask WSGI application engine.
-- **Database/Security:** Flask-Bcrypt (salted password hashing) and secure JSON Web Tokens (`Flask-JWT-Extended`) for strict multi-user data isolation.
-- **Styling:** Centralized custom CSS styling
+
+### Backend Architecture
+- **Language:** Python (3.11+)
+- **Core Framework:** Flask (WSGI Micro-framework)
+- **Database / ORM:** SQLite file-based engine with Flask-SQLAlchemy 
+- **Database Versioning:** Flask-Migrate
+- **Security Protocols:** Flask-Bcrypt & Flask-JWT-Extended
+- **Configuration Management:** Python-Dotenv & Flask-CORS
+
+### Frontend Architecture
+- **UI Engine:** React 18
+- **Build Pipeline:** Vite (Dev Server & Compilation Tooling)
+- **Routing Infrastructure:** React Router DOM
+- **Network Proxy Tool:** Vite Internal Server Proxy Interceptor (Mapping `/api` to local port `5000`)
+- **Styling Architecture:** Pure CSS3 (Leveraging dynamic :root design tokens and native conic-gradient charts)
 
 ---
 
@@ -19,7 +30,7 @@ Using this app, tutors will be able to log student data, record session-specific
 - **Secure Session Management:** Custom user registration and login forms with global login state indicators. Unauthenticated requests are immediately blocked via frontend protected router wrappers.
 - **Dynamic Caseload Manager:** Full CRUD interface for student profiles featuring automated input regex filters (e.g., dynamic contact phone formatting).
 - **Individual Session Logging:** Captures dates, subjects, customizable durations, hourly billing increments, and lesson progress notes.
-- **Analytical Metrics:** Real-time summary generation displaying gross monthly revenues, total session logs, automated average lengths of meetings, visual representation of session data, and top-10 performance student rankings.
+- **Analytical Metrics:** Dynamic report generation displaying gross monthly revenues, total session logs, average lengths of meetings, visual representation of session data, and top-10 performance student rankings.
 
 ---
 
@@ -33,8 +44,12 @@ Ensure you have the following environments globally running on your host machine
 
 ### Backend Server Setup:
 cd backend
+pip install pipenv (if already installed)
+pipenv install
+pipenv shell
 python run.py
 
 ### Frontend Server Setup:
 cd frontend
 npm install react-router-dom
+npm run dev
