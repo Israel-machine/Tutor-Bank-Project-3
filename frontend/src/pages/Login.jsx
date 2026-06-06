@@ -61,7 +61,7 @@ export default function Login() {
         <button type="submit" className="auth-submit-btn-color">Enter</button>
       </form>
       <p className="auth-footer-text">
-        Don't have an account? <Link to="/signup">Sign Up</Link>
+        New User? <Link to="/signup">Sign Up Here</Link>
       </p>
     </div>
   );
