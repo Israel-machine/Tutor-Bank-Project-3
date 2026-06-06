@@ -43,13 +43,13 @@ Ensure you have the following environments globally running on your host machine
 ---
 
 ### Backend Server Setup:
-cd backend
-pip install pipenv (if already installed)
-pipenv install
-pipenv shell
-python run.py
+- cd backend
+- pip install pipenv (if already installed)
+- pipenv install
+- pipenv shell
+- python run.py
 
 ### Frontend Server Setup:
-cd frontend
-npm install react-router-dom
-npm run dev
+- cd frontend
+- npm install react-router-dom
+- npm run dev
