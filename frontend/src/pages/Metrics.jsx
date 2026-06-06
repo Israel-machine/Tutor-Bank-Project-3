@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Metrics() {
   const token = localStorage.getItem('token');
-  const { logout } = useAuth();
   const [metrics, setMetrics] = useState(null);
   const [error, setError] = useState('');
 
@@ -22,14 +20,12 @@ export default function Metrics() {
       .catch(err => setError(err.message));
   }, [token]);
 
-  if (!metrics) return <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>Building statistical engine profiles...</div>;
+  if (!metrics) return <div className="metrics-page-wrapper">Building statistical engine profiles...</div>;
 
-  // Safe assignments to guard against empty responses
   const subjectsList = metrics.subjects || [];
   const revenueRankList = metrics.revenue_ranking || [];
   const minutesRankList = metrics.minutes_ranking || [];
 
-  // Safe Pie Chart Computation
   const totalSessionsCount = subjectsList.reduce((sum, s) => sum + (s.sessions || 0), 0);
   let accumulatedPercentage = 0;
   
@@ -52,24 +48,24 @@ export default function Metrics() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif', color: '#333' }}>
+    <div className="metrics-page-wrapper">
       
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid #eee', paddingBottom: '10px', marginBottom: '20px' }}>
+      <header className="metrics-header">
         <h1>TutorBank Operations Dashboard (Current Month)</h1>
       </header>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginBottom: '30px' }}>
+      {error && <p className="metrics-text-error">{error}</p>}
+      <div className="metrics-grid-layout">
         
-        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', backgroundColor: '#fff' }}>
+        <div className="metrics-table-section">
           <h3>💰 Monthly Revenue Report</h3>
-          <p style={{ fontSize: '16px' }}><strong>Total Revenue:</strong> ${metrics.total_revenue || '0.00'}</p>
-          <p style={{ fontSize: '16px' }}><strong>Average Revenue Per Session:</strong> ${metrics.avg_revenue_per_session || '0.00'}</p>
+          <p className="metrics-card-text"><strong>Total Revenue:</strong> ${metrics.total_revenue || '0.00'}</p>
+          <p className="metrics-card-text"><strong>Average Revenue Per Session:</strong> ${metrics.avg_revenue_per_session || '0.00'}</p>
           
-          <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px dashed #ddd' }}>
-            <h4 style={{ margin: '0 0 10px 0', color: '#007bff' }}>🏆 Top 10 Revenue Rankings</h4>
-            {revenueRankList.length === 0 ? <p style={{ fontSize: '13px', color: '#777' }}>No records found.</p> : 
-              <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', lineHeight: '22px' }}>
+          <div className="metrics-ranking-box">
+            <h4 className="metrics-ranking-title-blue">🏆 Top 10 Revenue Rankings</h4>
+            {revenueRankList.length === 0 ? <p className="metrics-ranking-empty">No records found.</p> : 
+              <ol className="metrics-ranking-list">
                 {revenueRankList.map((student, idx) => (
                   <li key={idx}><strong>{student.name}</strong> : ${student.revenue}</li>
                 ))}
@@ -78,16 +74,16 @@ export default function Metrics() {
           </div>
         </div>
 
-        <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', backgroundColor: '#fff' }}>
+        <div className="metrics-table-section">
           <h3>⏱️ Monthly Minutes Report</h3>
-          <p style={{ fontSize: '16px' }}><strong>Total Sessions Logged:</strong> {metrics.total_sessions || 0} sessions</p>
-          <p style={{ fontSize: '16px' }}><strong>Total Minutes Logged:</strong> {metrics.total_minutes || 0} mins</p>
-          <p style={{ fontSize: '16px' }}><strong>Average Session Length:</strong> {metrics.avg_duration || '0.00'} mins</p>
+          <p className="metrics-card-text"><strong>Total Sessions Logged:</strong> {metrics.total_sessions || 0} sessions</p>
+          <p className="metrics-card-text"><strong>Total Minutes Logged:</strong> {metrics.total_minutes || 0} mins</p>
+          <p className="metrics-card-text"><strong>Average Session Length:</strong> {metrics.avg_duration || '0.00'} mins</p>
 
-          <div style={{ marginTop: '20px', paddingTop: '15px', borderTop: '1px dashed #ddd' }}>
-            <h4 style={{ margin: '0 0 10px 0', color: '#28a745' }}>⚡ Top 10 Most Minutes Logged</h4>
-            {minutesRankList.length === 0 ? <p style={{ fontSize: '13px', color: '#777' }}>No records found.</p> : 
-              <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', lineHeight: '22px' }}>
+          <div className="metrics-ranking-box">
+            <h4 className="metrics-ranking-title-green">⚡ Top 10 Most Minutes Logged</h4>
+            {minutesRankList.length === 0 ? <p className="metrics-ranking-empty">No records found.</p> : 
+              <ol className="metrics-ranking-list">
                 {minutesRankList.map((student, idx) => (
                   <li key={idx}><strong>{student.name}</strong> : {student.minutes} mins</li>
                 ))}
@@ -98,17 +94,17 @@ export default function Metrics() {
 
       </div>
 
-      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', marginBottom: '30px', backgroundColor: '#f8f9fa' }}>
-        <h3 style={{ marginTop: 0 }}>📊 Sessions By Subject</h3>
+      <div className="metrics-subject-section">
+        <h3 className="metrics-subject-title">📊 Sessions By Subject</h3>
         {subjectsList.length === 0 || totalSessionsCount === 0 ? (
-          <p style={{ color: '#666', fontStyle: 'italic' }}>No sessions logged during the active monthly tracking period.</p>
+          <p className="metrics-subject-empty">No sessions logged during the active monthly tracking period.</p>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginTop: '15px' }}>
+          <div className="metrics-pie-container">
             <div style={pieChartStyle} />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="metrics-pie-legend">
               {subjectsList.map((sub, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px' }}>
-                  <div style={{ width: '14px', height: '14px', borderRadius: '3px', backgroundColor: chartColors[i % chartColors.length] }} />
+                <div key={i} className="metrics-legend-row">
+                  <div className="metrics-legend-color-box" style={{ backgroundColor: chartColors[i % chartColors.length] }} />
                   <strong>{sub.subject.replace(/_/g, ' ')}:</strong> {sub.sessions} sessions ({((sub.sessions / totalSessionsCount) * 100).toFixed(1)}%)
                 </div>
               ))}
@@ -117,29 +113,29 @@ export default function Metrics() {
         )}
       </div>
 
-      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', backgroundColor: '#fff' }}>
-        <h3>📚 Montly Sessions Report</h3>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+      <div className="metrics-table-section">
+        <h3>📚 Monthly Sessions Report</h3>
+        <table className="metrics-table">
           <thead>
-            <tr style={{ backgroundColor: '#f4f4f4', textAlign: 'left' }}>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Subject Tracking Domain</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Total Session Counts</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Average Lendth of Session</th>
-              <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Total Revenue</th>
+            <tr className="metrics-table-head-row">
+              <th className="metrics-table-th">Subject Tracking Domain</th>
+              <th className="metrics-table-th">Total Session Counts</th>
+              <th className="metrics-table-th">Average Length of Session</th>
+              <th className="metrics-table-th">Total Revenue</th>
             </tr>
           </thead>
           <tbody>
             {subjectsList.length === 0 ? (
               <tr>
-                <td colSpan="4" style={{ padding: '15px', textAlign: 'center', color: '#777' }}>No subject data compiled for this month.</td>
+                <td colSpan="4" className="metrics-table-empty-td">No subject data compiled for this month.</td>
               </tr>
             ) : (
               subjectsList.map((sub, index) => (
                 <tr key={index}>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>{sub.subject.replace(/_/g, ' ')}</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>{sub.sessions} sessions</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>{sub.avg_minutes} mins / session</td>
-                  <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>${sub.revenue}</td>
+                  <td className="metrics-table-td">{sub.subject.replace(/_/g, ' ')}</td>
+                  <td className="metrics-table-td">{sub.sessions} sessions</td>
+                  <td className="metrics-table-td">{sub.avg_minutes} mins / session</td>
+                  <td className="metrics-table-td">${sub.revenue}</td>
                 </tr>
               ))
             )}

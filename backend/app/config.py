@@ -8,4 +8,3 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=8)
-    #Set the expiration for a toke fot be 8 hours to mirror a full day of work (avoid having to login and out )

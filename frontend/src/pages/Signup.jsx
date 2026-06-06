@@ -35,10 +35,10 @@ export default function Signup() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+    <div className="auth-page-box">
       <h2>TutorBank Sign Up</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {success && <p style={{ color: 'green' }}>Account created! Redirecting to login...</p>}
+      {error && <p className="auth-text-error">{error}</p>}
+      {success && <p className="auth-text-success">{error || 'Account created! Redirecting to login...'}</p>}
       
       <form onSubmit={handleSubmit}>
         <div>
@@ -48,7 +48,7 @@ export default function Signup() {
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
             required 
-            style={{ width: '100%', marginBottom: '10px', padding: '8px' }}
+            className="auth-input-padding"
           />
         </div>
         <div>
@@ -58,14 +58,14 @@ export default function Signup() {
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required 
-            style={{ width: '100%', marginBottom: '20px', padding: '8px' }}
+            className="auth-input-padding-lg"
           />
         </div>
-        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px' }}>
+        <button type="submit" className="auth-submit-btn-color">
           Create Account
         </button>
       </form>
-      <p style={{ marginTop: '15px' }}>
+      <p className="auth-footer-text">
         Already have an account? <Link to="/login">Return to Login</Link>
       </p>
     </div>

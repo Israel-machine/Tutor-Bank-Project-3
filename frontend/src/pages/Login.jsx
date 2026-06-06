@@ -26,18 +26,17 @@ export default function Login() {
         throw new Error(data.error || 'Login failed');
       }
 
-      // Context saves token to localStorage and sets global user state
       login(data.token, data.user);
-      navigate('/'); // Go to Dashboard
+      navigate('/');
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px' }}>
+    <div className="auth-page-container">
       <h2>TutorBank Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="auth-text-error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username:</label>
@@ -46,7 +45,7 @@ export default function Login() {
             value={username} 
             onChange={(e) => setUsername(e.target.value)} 
             required 
-            style={{ width: '100%', marginBottom: '10px' }}
+            className="auth-input-group"
           />
         </div>
         <div>
@@ -56,12 +55,12 @@ export default function Login() {
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             required 
-            style={{ width: '100%', marginBottom: '20px' }}
+            className="auth-input-group-lg"
           />
         </div>
-        <button type="submit" style={{ width: '100%', padding: '10px' }}>Enter</button>
+        <button type="submit" className="auth-submit-btn-color">Enter</button>
       </form>
-      <p style={{ marginTop: '15px' }}>
+      <p className="auth-footer-text">
         Don't have an account? <Link to="/signup">Sign Up</Link>
       </p>
     </div>
