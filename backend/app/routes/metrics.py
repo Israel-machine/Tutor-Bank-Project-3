@@ -11,7 +11,6 @@ metrics_bp = Blueprint('metrics', __name__)
 def get_metrics_summary():
     user_id = get_jwt_identity()
     
-    # Timezone-safe local calculation alignment
     now = datetime.now()
     current_year = now.year
     current_month = now.month
@@ -27,7 +26,6 @@ def get_metrics_summary():
             "revenue_ranking": [], "minutes_ranking": [], "subjects": []
         })
 
-    # Pull sessions scoped specifically to the current year and current month
     sessions = Session.query.filter(
         Session.student_id.in_(student_ids),
         db.extract('year', Session.date) == current_year,
@@ -54,13 +52,11 @@ def get_metrics_summary():
         subject_data[s.subject]["total_minutes"] += s.duration_minutes
         subject_data[s.subject]["total_revenue"] += cost
 
-    # Sort and format Top 10 Revenue Generating Students
     rev_rank = sorted(
         [{"name": student_map[sid], "revenue": f"{amt:.2f}"} for sid, amt in student_revenue.items()],
         key=lambda x: float(x["revenue"]), reverse=True
     )[:10]
 
-    # Sort and format Top 10 Clocked Minutes Students
     min_rank = sorted(
         [{"name": student_map[sid], "minutes": mins} for sid, mins in student_minutes.items()],
         key=lambda x: x["minutes"], reverse=True
@@ -68,7 +64,6 @@ def get_metrics_summary():
 
     formatted_subjects = []
     for subj, data in subject_data.items():
-        # Calculate subject average instead of returning raw totals
         avg_mins = data["total_minutes"] / data["sessions"] if data["sessions"] > 0 else 0
         
         formatted_subjects.append({

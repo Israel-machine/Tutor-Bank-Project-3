@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 students_bp = Blueprint('students', __name__) 
 
-@students_bp.route('', methods=['GET'])
+@students_bp.route('', methods=['GET']) 
 @jwt_required()
 def get_students():
     current_user_id = int(get_jwt_identity())
@@ -52,21 +52,17 @@ def create_student():
     db.session.commit()
     return jsonify({"message": "Student created successfully", "id": new_student.id}), 201
 
-
-# --- NEW ADDITION: INDIVIDUAL STUDENT GET ROUTE WITH 401 SECURITY ---
 @students_bp.route('/<int:student_id>', methods=['GET'])
 @jwt_required()
 def get_single_student(student_id):
     current_user_id = int(get_jwt_identity())
     student = db.session.get(Student, student_id)
     
-    # 1. Verify existence
     if not student:
-        return jsonify({"error": "Student profile not found"}), 404
+        return jsonify({"error": "Student not found"}), 404
         
-    # 2. Strict Ownership Check: Return 401 if it belongs to someone else
     if student.user_id != current_user_id:
-        return jsonify({"error": "Unauthorized manipulation attempt detected."}), 401
+        return jsonify({"error": "Unauthorized"}), 401
         
     return jsonify({
         "id": student.id,
@@ -90,7 +86,6 @@ def update_student(student_id):
     if not student:
         return jsonify({"error": "Student not found"}), 404
         
-    # ALTERED: Explicitly return 401 for unauthorized cross-user modifications
     if student.user_id != current_user_id:
         return jsonify({"error": "Unauthorized manipulation attempt detected."}), 401
         
@@ -118,7 +113,6 @@ def delete_student(student_id):
     if not student:
         return jsonify({"error": "Student not found"}), 404
         
-    # ALTERED: Explicitly return 401 for unauthorized deletion attempts
     if student.user_id != current_user_id:
         return jsonify({"error": "Unauthorized manipulation attempt detected."}), 401
         

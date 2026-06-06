@@ -6,7 +6,6 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Auto-login if a token exists on refresh
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -25,7 +24,7 @@ export function AuthProvider({ children }) {
         setUser(userData);
       })
       .catch(() => {
-        localStorage.removeItem('token'); // Clear bad token
+        localStorage.removeItem('token'); 
       })
       .finally(() => {
         setLoading(false);

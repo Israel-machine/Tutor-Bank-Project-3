@@ -14,7 +14,7 @@ export default function Navbar() {
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    height: '60px', // Ensures consistent size
+    height: '60px', 
     boxSizing: 'border-box'
   };
 
@@ -27,7 +27,6 @@ export default function Navbar() {
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-        {/* Requirement 2: Display Username */}
         <span style={{ fontWeight: 'bold', color: '#555' }}>
           User: {user?.username}
         </span>

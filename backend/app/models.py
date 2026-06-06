@@ -11,7 +11,6 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     students = db.relationship('Student', backref='tutor', lazy=True, cascade="all, delete-orphan")
-    #Need to set password
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password).decode('utf-8')    
@@ -27,7 +26,6 @@ class Student(db.Model):
     student_last_name = db.Column(db.String(50), nullable=False)
     school = db.Column(db.String(100))
     school_grade = db.Column(db.String(20))
-    #use db.Text for varied address length
     billing_address = db.Column(db.Text)
     contact_name = db.Column(db.String(50), nullable=False)
     contact_phone = db.Column(db.String(20))
@@ -39,7 +37,6 @@ class Session(db.Model):
     __tablename__ = 'sessions'
 
     id = db.Column(db.Integer, primary_key=True)
-    #sets date to present date by default
     date = db.Column(db.Date, default=date.today, nullable=False)
     subject = db.Column(db.String(50), nullable=False)
     hourly_rate = db.Column(db.Float, nullable=False)

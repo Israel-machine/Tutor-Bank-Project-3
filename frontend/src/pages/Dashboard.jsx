@@ -22,17 +22,20 @@ export default function Dashboard() {
   const token = localStorage.getItem('token');
 
   const fetchStudents = async () => {
-    try {
-      const res = await fetch('/api/students', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to fetch students');
-      const data = await res.json();
-      setStudents(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  try {
+    // Ensure there is NO slash at the end of 'students'
+    const res = await fetch('/api/students', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (!res.ok) throw new Error('Failed to fetch students');
+    
+    const data = await res.json();
+    setStudents(data);
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
   useEffect(() => {
     fetchStudents();
@@ -55,7 +58,6 @@ export default function Dashboard() {
       });
       if (!res.ok) throw new Error('Failed to create student');
       
-      // Reset Form and refresh list
       setFormData({
         student_first_name: '', student_last_name: '', school: '',
         school_grade: '', billing_address: '', contact_name: '',
@@ -90,7 +92,6 @@ export default function Dashboard() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <div style={{ display: 'flex', marginTop: '20px', gap: '40px' }}>
-        {/* Left Side: Sidebar Form (All 8 Fields) */}
         <div style={{ width: '300px', padding: '15px', border: '1px solid #ddd', borderRadius: '6px' }}>
           <h3>Add New Student</h3>
           <form onSubmit={handleCreateStudent}>
@@ -115,7 +116,6 @@ export default function Dashboard() {
           </form>
         </div>
 
-        {/* Right Side: Students Container Cards */}
         <div style={{ flex: 1 }}>
           <h3>Your Caseload</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
